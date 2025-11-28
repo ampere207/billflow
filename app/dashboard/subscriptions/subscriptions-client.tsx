@@ -22,6 +22,7 @@ import {
   XCircle,
 } from "lucide-react"
 import { CreateSubscriptionDialog } from "@/components/dashboard/create-subscription-dialog"
+import { InvoicePreviewDialog } from "@/components/dashboard/invoice-preview-dialog"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import { Separator } from "@/components/ui/separator"
@@ -34,6 +35,8 @@ export function SubscriptionsClient({
 }) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [expandedSubscriptions, setExpandedSubscriptions] = useState<Set<string>>(new Set())
+  const [invoicePreviewOpen, setInvoicePreviewOpen] = useState(false)
+  const [selectedSubscription, setSelectedSubscription] = useState<any>(null)
   const router = useRouter()
   const { toast } = useToast()
 
@@ -349,35 +352,13 @@ export function SubscriptionsClient({
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={async () => {
-                          try {
-                            const res = await fetch("/api/generate-invoice", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({ subscription_id: subscription.id }),
-                            })
-                            const data = await res.json()
-                            if (res.ok) {
-                              toast({
-                                variant: "success",
-                                title: "Success",
-                                description: "Invoice generated successfully",
-                              })
-                              router.refresh()
-                            } else {
-                              throw new Error(data.error || "Failed to generate invoice")
-                            }
-                          } catch (error: any) {
-                            toast({
-                              variant: "destructive",
-                              title: "Error",
-                              description: error.message || "Failed to generate invoice",
-                            })
-                          }
+                        onClick={() => {
+                          setSelectedSubscription(subscription)
+                          setInvoicePreviewOpen(true)
                         }}
                       >
                         <FileText className="mr-2 h-4 w-4" />
-                        Generate Invoice
+                        Preview Invoice
                       </Button>
                     </div>
 
@@ -604,6 +585,13 @@ export function SubscriptionsClient({
         </div>
       </div>
       <CreateSubscriptionDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      {selectedSubscription && (
+        <InvoicePreviewDialog
+          open={invoicePreviewOpen}
+          onOpenChange={setInvoicePreviewOpen}
+          subscription={selectedSubscription}
+        />
+      )}
     </>
   )
 }
