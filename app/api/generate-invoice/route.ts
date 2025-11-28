@@ -24,8 +24,23 @@ export async function GET(request: NextRequest) {
       .single()
 
     if (!subscription) {
+      // Check if there are any subscriptions at all
+      const { data: anySub } = await supabase
+        .from("subscriptions")
+        .select("id")
+        .eq("company_id", companyId)
+        .limit(1)
+        .single()
+
+      if (!anySub) {
+        return NextResponse.json(
+          { error: "No subscriptions found. Please create a subscription first." },
+          { status: 404 }
+        )
+      }
+
       return NextResponse.json(
-        { error: "No active subscription found" },
+        { error: "No active subscription found. Please activate a subscription first." },
         { status: 404 }
       )
     }
@@ -221,6 +236,17 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    // Check if request wants JSON (from fetch) or redirect (from link)
+    const acceptHeader = request.headers.get("accept")
+    if (acceptHeader?.includes("application/json")) {
+      return NextResponse.json({
+        success: true,
+        invoice: {
+          ...invoice,
+          plan: plan.name,
+        },
+      })
+    }
     return NextResponse.redirect(new URL("/dashboard/invoices", request.url))
   } catch (error) {
     console.error("Error generating invoice:", error)

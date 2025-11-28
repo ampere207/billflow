@@ -1,4 +1,23 @@
 import { createAdminClient } from '../lib/supabase/admin'
+import { config } from 'dotenv'
+import { resolve } from 'path'
+
+// Load environment variables from .env.local
+config({ path: resolve(process.cwd(), '.env.local') })
+
+// Validate required environment variables
+const requiredEnvVars = [
+  'NEXT_PUBLIC_SUPABASE_URL',
+  'SUPABASE_SERVICE_ROLE_KEY'
+]
+
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    console.error(`❌ Error: ${envVar} is not set in .env.local`)
+    console.error('Please make sure you have created .env.local with your Supabase credentials.')
+    process.exit(1)
+  }
+}
 
 const supabase = createAdminClient()
 

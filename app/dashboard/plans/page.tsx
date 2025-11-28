@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
 import { getSession } from "@/lib/auth"
-import { ApiKeysClient } from "./api-keys-client"
+import { PlansClient } from "./plans-client"
 
-export default async function ApiKeysPage() {
+export default async function PlansPage() {
   const session = await getSession()
   const supabase = await createClient()
 
@@ -12,15 +12,16 @@ export default async function ApiKeysPage() {
 
   const companyId = (session.user as any).companyId
 
-  const { data: apiKeys, error } = await supabase
-    .from("api_keys")
+  const { data: plans, error } = await supabase
+    .from("plans")
     .select("*")
     .eq("company_id", companyId)
     .order("created_at", { ascending: false })
 
   if (error) {
-    return <div>Error loading API keys</div>
+    return <div>Error loading plans</div>
   }
 
-  return <ApiKeysClient apiKeys={apiKeys || []} />
+  return <PlansClient plans={plans || []} />
 }
+

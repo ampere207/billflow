@@ -12,6 +12,7 @@ import {
   Activity,
   LogOut,
   Sparkles,
+  Package,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { signOut } from "next-auth/react"
@@ -19,6 +20,7 @@ import { Separator } from "@/components/ui/separator"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Plans", href: "/dashboard/plans", icon: Package },
   { name: "Subscriptions", href: "/dashboard/subscriptions", icon: CreditCard },
   { name: "Invoices", href: "/dashboard/invoices", icon: FileText },
   { name: "Usage", href: "/dashboard/usage", icon: Activity },
