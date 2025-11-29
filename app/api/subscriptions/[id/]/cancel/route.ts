@@ -51,17 +51,12 @@ export async function PATCH(
     }
 
     // Cancel subscription
-    const updateQuery = adminSupabase
+    const { data: updated, error: updateError } = await (adminSupabase
       .from("subscriptions")
-      .update({
-        status: "canceled",
-        cancel_at_period_end: true,
-      })
+      .update({ status: "canceled", cancel_at_period_end: true } as any)
       .eq("id", id as any)
       .select()
-      .single()
-    
-    const { data: updated, error: updateError } = await updateQuery as any
+      .single() as any)
 
     if (updateError) {
       return NextResponse.json(

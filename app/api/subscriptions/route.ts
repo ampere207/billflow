@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create subscription
-    const { data: subscription, error: subError } = await adminSupabase
+    const { data: subscription, error: subError } = await (adminSupabase
       .from("subscriptions")
       .insert({
         company_id: companyId,
@@ -78,9 +78,9 @@ export async function POST(request: NextRequest) {
         current_period_start: now.toISOString(),
         current_period_end: periodEnd.toISOString(),
         cancel_at_period_end: false,
-      })
+      } as any)
       .select("*, plans(*)")
-      .single()
+      .single() as any)
 
     if (subError) {
       return NextResponse.json(

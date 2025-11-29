@@ -51,16 +51,12 @@ export async function PATCH(
     }
 
     // Revoke API key
-    const updateQuery = adminSupabase
+    const { data: updated, error: updateError } = await (adminSupabase
       .from("api_keys")
-      .update({
-        is_active: false,
-      })
+      .update({ is_active: false } as any)
       .eq("id", id as any)
       .select()
-      .single()
-    
-    const { data: updated, error: updateError } = await updateQuery as any
+      .single() as any)
 
     if (updateError) {
       return NextResponse.json(

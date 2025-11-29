@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: plan, error } = await adminSupabase
+    const { data: plan, error } = await (adminSupabase
       .from("plans")
       .insert({
         company_id: companyId,
@@ -68,9 +68,9 @@ export async function POST(request: NextRequest) {
         interval: interval,
         features: features || null,
         is_active: true,
-      })
+      } as any)
       .select()
-      .single()
+      .single() as any)
 
     if (error) {
       return NextResponse.json(

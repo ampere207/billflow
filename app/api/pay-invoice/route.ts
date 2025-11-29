@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create payment (demo - always succeeds)
-    const { data: payment, error: paymentError } = await adminSupabase
+    const { data: payment, error: paymentError } = await (adminSupabase
       .from("payments")
       .insert({
         invoice_id: invoice_id,
@@ -56,9 +56,9 @@ export async function POST(request: NextRequest) {
         payment_method: "demo_card",
         status: "completed",
         transaction_id: `txn_${Date.now()}`,
-      })
+      } as any)
       .select()
-      .single()
+      .single() as any)
 
     if (paymentError) {
       return NextResponse.json(
@@ -68,13 +68,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Update invoice status
-    await adminSupabase
+    await (adminSupabase
       .from("invoices")
       .update({
         status: "paid",
         paid_at: new Date().toISOString(),
-      })
-      .eq("id", invoice_id)
+      } as any)
+      .eq("id", invoice_id as any) as any)
 
     // Get billing settings for webhook
     const { data: settings } = await adminSupabase
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 
     // Log webhook event
     if (settings?.webhook_url) {
-      await adminSupabase.from("webhooks").insert({
+      await (adminSupabase.from("webhooks").insert({
         company_id: companyId,
         event_type: "payment.completed",
         payload: {
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
           currency: payment.currency,
         },
         status: "pending",
-      })
+      } as any) as any)
     }
 
     return NextResponse.json({

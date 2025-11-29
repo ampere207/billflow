@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
 
     // Record demo usage
     const adminSupabase = createAdminClient()
-    const { data: usageRecord, error: usageError } = await adminSupabase
+    const { data: usageRecord, error: usageError } = await (adminSupabase
       .from("usage_records")
       .insert({
         company_id: companyId,
@@ -54,9 +54,9 @@ export async function GET(request: NextRequest) {
         metric_name: "api_calls",
         quantity: Math.floor(Math.random() * 1000) + 100,
         recorded_at: new Date().toISOString(),
-      })
+      } as any)
       .select()
-      .single()
+      .single() as any)
 
     if (usageError) {
       return NextResponse.json(
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create usage record
-    const { data: usageRecord, error: usageError } = await adminSupabase
+    const { data: usageRecord, error: usageError } = await (adminSupabase
       .from("usage_records")
       .insert({
         company_id: companyId,
@@ -128,9 +128,9 @@ export async function POST(request: NextRequest) {
         metric_name: metric_name,
         quantity: Number(quantity),
         recorded_at: new Date().toISOString(),
-      })
+      } as any)
       .select()
-      .single()
+      .single() as any)
 
     if (usageError) {
       return NextResponse.json(

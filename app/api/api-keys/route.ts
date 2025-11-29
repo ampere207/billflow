@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store hashed key
-    const { data: apiKeyRecord, error } = await adminSupabase
+    const { data: apiKeyRecord, error } = await (adminSupabase
       .from("api_keys")
       .insert({
         company_id: companyId,
@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
         key_prefix: keyPrefix,
         expires_at: expiresAt,
         is_active: true,
-      })
+      } as any)
       .select()
-      .single()
+      .single() as any)
 
     if (error) {
       return NextResponse.json(
