@@ -32,7 +32,7 @@ async function seed() {
       .insert({
         name: 'Acme Corp',
         slug: 'acme-corp',
-      })
+      } as any)
       .select()
       .single()
 
@@ -43,7 +43,7 @@ async function seed() {
       .insert({
         name: 'TechStart Inc',
         slug: 'techstart-inc',
-      })
+      } as any)
       .select()
       .single()
 
@@ -60,7 +60,7 @@ async function seed() {
         email: 'john@acme.com',
         name: 'John Doe',
         role: 'owner',
-      })
+      } as any)
       .select()
       .single()
 
@@ -73,7 +73,7 @@ async function seed() {
         email: 'jane@acme.com',
         name: 'Jane Smith',
         role: 'admin',
-      })
+      } as any)
       .select()
       .single()
 
@@ -86,7 +86,7 @@ async function seed() {
         email: 'bob@techstart.com',
         name: 'Bob Johnson',
         role: 'owner',
-      })
+      } as any)
       .select()
       .single()
 
@@ -111,7 +111,7 @@ async function seed() {
         invoice_prefix: 'TECH',
         payment_terms_days: 15,
       },
-    ])
+    ] as any)
 
     console.log('✅ Billing settings created')
 
@@ -132,7 +132,7 @@ async function seed() {
           support: 'email',
         },
         is_active: true,
-      })
+      } as any)
       .select()
       .single()
 
@@ -153,7 +153,7 @@ async function seed() {
           support: 'priority',
         },
         is_active: true,
-      })
+      } as any)
       .select()
       .single()
 
@@ -174,7 +174,7 @@ async function seed() {
           support: '24/7',
         },
         is_active: true,
-      })
+      } as any)
       .select()
       .single()
 
@@ -198,7 +198,7 @@ async function seed() {
         current_period_start: now.toISOString(),
         current_period_end: nextMonth.toISOString(),
         cancel_at_period_end: false,
-      })
+      } as any)
       .select()
       .single()
 
@@ -214,7 +214,7 @@ async function seed() {
         current_period_start: now.toISOString(),
         current_period_end: nextMonth.toISOString(),
         cancel_at_period_end: false,
-      })
+      } as any)
       .select()
       .single()
 
@@ -240,7 +240,7 @@ async function seed() {
         currency: 'USD',
         due_date: dueDate.toISOString(),
         paid_at: now.toISOString(),
-      })
+      } as any)
       .select()
       .single()
 
@@ -258,7 +258,7 @@ async function seed() {
         total: 32.54,
         currency: 'USD',
         due_date: dueDate.toISOString(),
-      })
+      } as any)
       .select()
       .single()
 
@@ -283,7 +283,7 @@ async function seed() {
         unit_price: 29.99,
         amount: 29.99,
       },
-    ])
+    ] as any)
 
     console.log('✅ Invoice items created')
 
@@ -296,7 +296,7 @@ async function seed() {
       payment_method: 'demo_card',
       status: 'completed',
       transaction_id: `txn_${Date.now()}`,
-    })
+    } as any)
 
     console.log('✅ Payments created')
 
@@ -316,7 +316,7 @@ async function seed() {
       recorded_at: date.toISOString(),
     }))
 
-    await supabase.from('usage_records').insert(usageRecords)
+    await supabase.from('usage_records').insert(usageRecords as any)
 
     console.log('✅ Usage records created')
 
@@ -341,7 +341,7 @@ async function seed() {
         key_prefix: apiKey2.substring(0, 12),
         is_active: true,
       },
-    ])
+    ] as any)
 
     console.log('✅ API keys created')
     console.log('\n📝 Demo API Keys (for reference):')
