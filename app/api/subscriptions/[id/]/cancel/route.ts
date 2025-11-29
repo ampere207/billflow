@@ -14,7 +14,7 @@ export async function PATCH(
     }
 
     const params = await context.params
-    const id = params.id as string
+    const id = String(params.id)
     
     if (!id) {
       return NextResponse.json(
@@ -30,8 +30,8 @@ export async function PATCH(
     const { data: subscription, error: subError } = await supabase
       .from("subscriptions")
       .select("*")
-      .eq("id", id)
-      .eq("company_id", companyId)
+      .eq("id", id as any)
+      .eq("company_id", companyId as any)
       .single()
 
     if (subError || !subscription) {
@@ -48,7 +48,7 @@ export async function PATCH(
         status: "canceled",
         cancel_at_period_end: true,
       })
-      .eq("id", id)
+      .eq("id", id as any)
       .select()
       .single()
 

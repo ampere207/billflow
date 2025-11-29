@@ -14,7 +14,7 @@ export async function PATCH(
     }
 
     const params = await context.params
-    const id = params.id as string
+    const id = String(params.id)
     
     if (!id) {
       return NextResponse.json(
@@ -30,8 +30,8 @@ export async function PATCH(
     const { data: apiKey, error: keyError } = await supabase
       .from("api_keys")
       .select("*")
-      .eq("id", id)
-      .eq("company_id", companyId)
+      .eq("id", id as any)
+      .eq("company_id", companyId as any)
       .single()
 
     if (keyError || !apiKey) {
@@ -47,7 +47,7 @@ export async function PATCH(
       .update({
         is_active: false,
       })
-      .eq("id", id)
+      .eq("id", id as any)
       .select()
       .single()
 
