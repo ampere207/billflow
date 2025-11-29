@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin"
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<Record<string, string | string[]>> }
 ) {
   try {
     const session = await getSession()
@@ -13,7 +13,15 @@ export async function PATCH(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { id } = await params
+    const params = await context.params
+    const id = params.id as string
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID parameter is required" },
+        { status: 400 }
+      )
+    }
     const companyId = (session.user as any).companyId
     const supabase = await createClient()
     const adminSupabase = createAdminClient()
