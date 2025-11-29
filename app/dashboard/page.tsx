@@ -43,15 +43,15 @@ export default async function DashboardPage() {
   const usageRecords = usageRes.data || []
 
   const totalRevenue = invoices
-    .filter((inv) => inv.status === "paid")
-    .reduce((sum, inv) => sum + Number(inv.total), 0)
+    .filter((inv: any) => inv.status === "paid")
+    .reduce((sum: number, inv: any) => sum + Number(inv.total), 0)
 
   const totalUsage = usageRecords.reduce(
-    (sum, record) => sum + Number(record.quantity),
+    (sum: number, record: any) => sum + Number(record.quantity),
     0
   )
 
-  const pendingInvoices = invoices.filter((inv) => inv.status === "open").length
+  const pendingInvoices = invoices.filter((inv: any) => inv.status === "open").length
   const revenueChange = 12.5 // Mock percentage
 
   const stats = [
@@ -103,7 +103,7 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => (
+        {stats.map((stat: any, index: number) => (
           <Card
             key={stat.title}
             className="group relative overflow-hidden border-2 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover-lift animate-fade-in"
@@ -152,7 +152,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {invoices.length > 0 ? (
-                invoices.map((invoice) => (
+                invoices.map((invoice: any) => (
                   <div
                     key={invoice.id}
                     className="group flex items-center justify-between rounded-lg border p-4 transition-all hover:bg-muted/50 hover:shadow-md"
@@ -215,7 +215,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {subscriptions.length > 0 ? (
-                subscriptions.map((sub) => (
+                subscriptions.map((sub: any) => (
                   <div
                     key={sub.id}
                     className="group flex items-center justify-between rounded-lg border p-4 transition-all hover:bg-muted/50 hover:shadow-md"

@@ -104,7 +104,7 @@ export default function Home() {
                 description: "Integrate seamlessly with your app using our comprehensive REST API",
                 gradient: "from-orange-500 to-red-500",
               },
-            ].map((feature, index) => (
+            ].map((feature: any, index: number) => (
               <Card
                 key={feature.title}
                 className="group relative overflow-hidden border-2 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover-lift animate-fade-in"
@@ -143,7 +143,7 @@ export default function Home() {
               "Multi-currency support",
               "Webhook notifications",
               "Comprehensive analytics",
-            ].map((benefit) => (
+            ].map((benefit: string) => (
               <div key={benefit} className="flex items-start gap-3">
                 <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
                   <Check className="h-4 w-4 text-primary" />

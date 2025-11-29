@@ -68,7 +68,7 @@ export function ApiKeysClient({ apiKeys }: { apiKeys: any[] }) {
 
         <div className="grid gap-6">
           {apiKeys && apiKeys.length > 0 ? (
-            apiKeys.map((key, index) => (
+            apiKeys.map((key: any, index: number) => (
               <Card
                 key={key.id}
                 className="group relative overflow-hidden border-2 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover-lift animate-fade-in"

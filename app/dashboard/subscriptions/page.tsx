@@ -28,7 +28,7 @@ export default async function SubscriptionsPage() {
   }
 
   // Fetch invoices for all subscriptions
-  const subscriptionIds = subscriptions?.map((s) => s.id) || []
+  const subscriptionIds = subscriptions?.map((s: any) => s.id) || []
   const { data: invoices } = subscriptionIds.length > 0
     ? await supabase
         .from("invoices")
@@ -48,7 +48,7 @@ export default async function SubscriptionsPage() {
     : { data: [] }
 
   // Group invoices and usage by subscription_id
-  const invoicesBySubscription = (invoices || []).reduce((acc, invoice) => {
+  const invoicesBySubscription = (invoices || []).reduce((acc: any, invoice: any) => {
     if (invoice.subscription_id) {
       if (!acc[invoice.subscription_id]) {
         acc[invoice.subscription_id] = []
@@ -58,7 +58,7 @@ export default async function SubscriptionsPage() {
     return acc
   }, {} as Record<string, typeof invoices>)
 
-  const usageBySubscription = (usageRecords || []).reduce((acc, record) => {
+  const usageBySubscription = (usageRecords || []).reduce((acc: any, record: any) => {
     if (!acc[record.subscription_id]) {
       acc[record.subscription_id] = []
     }
@@ -67,7 +67,7 @@ export default async function SubscriptionsPage() {
   }, {} as Record<string, typeof usageRecords>)
 
   // Enrich subscriptions with related data
-  const enrichedSubscriptions = (subscriptions || []).map((sub) => ({
+  const enrichedSubscriptions = (subscriptions || []).map((sub: any) => ({
     ...sub,
     invoices: invoicesBySubscription[sub.id] || [],
     usageRecords: usageBySubscription[sub.id] || [],

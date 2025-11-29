@@ -114,12 +114,12 @@ export function SubscriptionsClient({
 
   const calculateTotalRevenue = (invoices: any[]) => {
     return invoices
-      .filter((inv) => inv.status === "paid")
-      .reduce((sum, inv) => sum + Number(inv.total || 0), 0)
+      .filter((inv: any) => inv.status === "paid")
+      .reduce((sum: number, inv: any) => sum + Number(inv.total || 0), 0)
   }
 
   const calculateTotalUsage = (usageRecords: any[]) => {
-    return usageRecords.reduce((sum, record) => sum + Number(record.quantity || 0), 0)
+    return usageRecords.reduce((sum: number, record: any) => sum + Number(record.quantity || 0), 0)
   }
 
   const getDaysRemaining = (endDate: string) => {
@@ -169,7 +169,7 @@ export function SubscriptionsClient({
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Active</p>
                     <p className="text-3xl font-bold mt-1 text-green-600">
-                      {subscriptions.filter((s) => s.status === "active").length}
+                      {subscriptions.filter((s: any) => s.status === "active").length}
                     </p>
                   </div>
                   <CheckCircle2 className="h-8 w-8 text-green-600 opacity-50" />
@@ -183,7 +183,7 @@ export function SubscriptionsClient({
                     <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
                     <p className="text-3xl font-bold mt-1">
                       {formatCurrency(
-                        subscriptions.reduce((sum, s) => {
+                        subscriptions.reduce((sum: number, s: any) => {
                           const invoices = s.invoices || []
                           return sum + calculateTotalRevenue(invoices)
                         }, 0),
@@ -202,7 +202,7 @@ export function SubscriptionsClient({
                     <p className="text-sm font-medium text-muted-foreground">Total Usage</p>
                     <p className="text-3xl font-bold mt-1">
                       {subscriptions
-                        .reduce((sum, s) => sum + calculateTotalUsage(s.usageRecords || []), 0)
+                        .reduce((sum: number, s: any) => sum + calculateTotalUsage(s.usageRecords || []), 0)
                         .toLocaleString()}
                     </p>
                   </div>
@@ -215,7 +215,7 @@ export function SubscriptionsClient({
 
         <div className="grid gap-6">
           {subscriptions && subscriptions.length > 0 ? (
-            subscriptions.map((subscription, index) => {
+            subscriptions.map((subscription: any, index: number) => {
               const plan = subscription.plans as any
               const user = subscription.users as any
               const statusGradient = getStatusGradient(subscription.status)

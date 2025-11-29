@@ -76,7 +76,7 @@ export default async function InvoicesPage() {
 
       <div className="grid gap-6">
         {invoices && invoices.length > 0 ? (
-          invoices.map((invoice, index) => {
+          invoices.map((invoice: any, index: number) => {
             const subscription = invoice.subscriptions as any
             const plan = subscription?.plans as any
             const statusGradient = getStatusGradient(invoice.status)

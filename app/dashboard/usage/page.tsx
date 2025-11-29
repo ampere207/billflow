@@ -37,7 +37,7 @@ export default async function UsagePage() {
   }
 
   // Group usage by metric name
-  const usageByMetric = usageRecords?.reduce((acc, record) => {
+  const usageByMetric = usageRecords?.reduce((acc: any, record: any) => {
     const metric = record.metric_name
     if (!acc[metric]) {
       acc[metric] = []
@@ -65,14 +65,14 @@ export default async function UsagePage() {
 
       {usageByMetric && Object.keys(usageByMetric).length > 0 ? (
         <div className="grid gap-6">
-          {Object.entries(usageByMetric).map(([metricName, records], index) => {
+          {Object.entries(usageByMetric).map(([metricName, records]: [string, any], index: number) => {
             const total = records.reduce(
-              (sum, r) => sum + Number(r.quantity),
+              (sum: number, r: any) => sum + Number(r.quantity),
               0
             )
             const avg = total / records.length
-            const max = Math.max(...records.map((r) => Number(r.quantity)))
-            const min = Math.min(...records.map((r) => Number(r.quantity)))
+            const max = Math.max(...records.map((r: any) => Number(r.quantity)))
+            const min = Math.min(...records.map((r: any) => Number(r.quantity)))
 
             return (
               <Card
@@ -125,7 +125,7 @@ export default async function UsagePage() {
                   </div>
                   <div className="space-y-3">
                     <p className="text-sm font-semibold text-muted-foreground">Recent Records</p>
-                    {records.slice(0, 10).map((record) => {
+                    {records.slice(0, 10).map((record: any) => {
                       const subscription = record.subscriptions as any
                       const plan = subscription?.plans as any
                       return (

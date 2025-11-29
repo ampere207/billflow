@@ -59,7 +59,7 @@ export function PlansClient({ plans }: { plans: any[] }) {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans && plans.length > 0 ? (
-            plans.map((plan, index) => {
+            plans.map((plan: any, index: number) => {
               const gradient = plan.is_active
                 ? "from-blue-500 to-cyan-500"
                 : "from-gray-500 to-slate-500"
