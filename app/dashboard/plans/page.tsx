@@ -4,7 +4,7 @@ import { PlansClient } from "./plans-client"
 
 export default async function PlansPage() {
   const session = await getSession()
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   if (!session?.user) {
     return null

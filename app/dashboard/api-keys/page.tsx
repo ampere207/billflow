@@ -4,7 +4,7 @@ import { ApiKeysClient } from "./api-keys-client"
 
 export default async function ApiKeysPage() {
   const session = await getSession()
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   if (!session?.user) {
     return null
