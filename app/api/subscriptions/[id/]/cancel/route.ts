@@ -16,23 +16,24 @@ export async function PATCH(
     const params = await context.params
     const id = String(params.id)
     
-    if (!id) {
+    if (!id || typeof id !== 'string') {
       return NextResponse.json(
         { error: "ID parameter is required" },
         { status: 400 }
       )
     }
     const companyId = (session.user as any).companyId
-    const supabase = await createClient()
     const adminSupabase = createAdminClient()
 
-    // Verify subscription belongs to company
-    const { data: subscription, error: subError } = await supabase
+    // Verify subscription belongs to company using admin client
+    const query = adminSupabase
       .from("subscriptions")
       .select("*")
       .eq("id", id as any)
       .eq("company_id", companyId as any)
       .single()
+    
+    const { data: subscription, error: subError } = await query as any
 
     if (subError || !subscription) {
       return NextResponse.json(
@@ -41,8 +42,16 @@ export async function PATCH(
       )
     }
 
+    // Verify it belongs to the company
+    if (subscription.company_id !== companyId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+      )
+    }
+
     // Cancel subscription
-    const { data: updated, error: updateError } = await adminSupabase
+    const updateQuery = adminSupabase
       .from("subscriptions")
       .update({
         status: "canceled",
@@ -51,6 +60,8 @@ export async function PATCH(
       .eq("id", id as any)
       .select()
       .single()
+    
+    const { data: updated, error: updateError } = await updateQuery as any
 
     if (updateError) {
       return NextResponse.json(
