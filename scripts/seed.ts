@@ -19,7 +19,7 @@ for (const envVar of requiredEnvVars) {
   }
 }
 
-const supabase = createAdminClient()
+const supabase = createAdminClient() as any
 
 async function seed() {
   console.log('🌱 Starting database seed...')
