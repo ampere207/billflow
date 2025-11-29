@@ -23,17 +23,15 @@ export async function PATCH(
       )
     }
     const companyId = (session.user as any).companyId
-    const adminSupabase = createAdminClient()
+    const adminSupabase = createAdminClient() as any
 
     // Verify subscription belongs to company using admin client
-    const query = adminSupabase
+    const { data: subscription, error: subError } = await adminSupabase
       .from("subscriptions")
       .select("*")
-      .eq("id", id as any)
-      .eq("company_id", companyId as any)
+      .eq("id", id)
+      .eq("company_id", companyId)
       .single()
-    
-    const { data: subscription, error: subError } = await query as any
 
     if (subError || !subscription) {
       return NextResponse.json(
@@ -51,12 +49,12 @@ export async function PATCH(
     }
 
     // Cancel subscription
-    const { data: updated, error: updateError } = await (adminSupabase
+    const { data: updated, error: updateError } = await adminSupabase
       .from("subscriptions")
-      .update({ status: "canceled", cancel_at_period_end: true } as any)
-      .eq("id", id as any)
+      .update({ status: "canceled", cancel_at_period_end: true })
+      .eq("id", id)
       .select()
-      .single() as any)
+      .single()
 
     if (updateError) {
       return NextResponse.json(

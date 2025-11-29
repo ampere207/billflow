@@ -23,17 +23,15 @@ export async function PATCH(
       )
     }
     const companyId = (session.user as any).companyId
-    const adminSupabase = createAdminClient()
+    const adminSupabase = createAdminClient() as any
 
     // Verify API key belongs to company using admin client
-    const query = adminSupabase
+    const { data: apiKey, error: keyError } = await adminSupabase
       .from("api_keys")
       .select("*")
-      .eq("id", id as any)
-      .eq("company_id", companyId as any)
+      .eq("id", id)
+      .eq("company_id", companyId)
       .single()
-    
-    const { data: apiKey, error: keyError } = await query as any
 
     if (keyError || !apiKey) {
       return NextResponse.json(
@@ -51,12 +49,12 @@ export async function PATCH(
     }
 
     // Revoke API key
-    const { data: updated, error: updateError } = await (adminSupabase
+    const { data: updated, error: updateError } = await adminSupabase
       .from("api_keys")
-      .update({ is_active: false } as any)
-      .eq("id", id as any)
+      .update({ is_active: false })
+      .eq("id", id)
       .select()
-      .single() as any)
+      .single()
 
     if (updateError) {
       return NextResponse.json(

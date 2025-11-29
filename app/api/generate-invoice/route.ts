@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     const companyId = (session.user as any).companyId
     const supabase = await createClient()
-    const adminSupabase = createAdminClient()
+    const adminSupabase = createAdminClient() as any
 
     // Get first active subscription
     const { data: subscription } = await supabase
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     )
 
     // Create invoice
-    const { data: invoice, error: invoiceError } = await (adminSupabase
+    const { data: invoice, error: invoiceError } = await adminSupabase
       .from("invoices")
       .insert({
         company_id: companyId,
@@ -82,9 +82,9 @@ export async function GET(request: NextRequest) {
         total: total,
         currency: plan.currency || "USD",
         due_date: dueDate.toISOString(),
-      } as any)
+      })
       .select()
-      .single() as any)
+      .single()
 
     if (invoiceError) {
       return NextResponse.json(
@@ -94,17 +94,17 @@ export async function GET(request: NextRequest) {
     }
 
     // Create invoice items
-    await (adminSupabase.from("invoice_items").insert({
+    await adminSupabase.from("invoice_items").insert({
       invoice_id: invoice.id,
       description: `${plan.name} - ${plan.interval === "month" ? "Monthly" : "Yearly"} Subscription`,
       quantity: 1,
       unit_price: subtotal,
       amount: subtotal,
-    } as any) as any)
+    })
 
     // Log webhook event
     if (settings?.webhook_url) {
-      await (adminSupabase.from("webhooks").insert({
+      await adminSupabase.from("webhooks").insert({
         company_id: companyId,
         event_type: "invoice.created",
         payload: {
@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
           currency: plan.currency,
         },
         status: "pending",
-      } as any) as any)
+      })
     }
 
     return NextResponse.redirect(new URL("/dashboard/invoices", request.url))
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
 
     const companyId = (session.user as any).companyId
     const supabase = await createClient()
-    const adminSupabase = createAdminClient()
+    const adminSupabase = createAdminClient() as any
 
     const body = await request.json()
     const subscription_id = body.subscription_id
@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
     )
 
     // Create invoice
-    const { data: invoice, error: invoiceError } = await (adminSupabase
+    const { data: invoice, error: invoiceError } = await adminSupabase
       .from("invoices")
       .insert({
         company_id: companyId,
@@ -201,9 +201,9 @@ export async function POST(request: NextRequest) {
         total: total,
         currency: plan.currency || "USD",
         due_date: dueDate.toISOString(),
-      } as any)
+      })
       .select()
-      .single() as any)
+      .single()
 
     if (invoiceError) {
       return NextResponse.json(
@@ -213,17 +213,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Create invoice items
-    await (adminSupabase.from("invoice_items").insert({
+    await adminSupabase.from("invoice_items").insert({
       invoice_id: invoice.id,
       description: `${plan.name} - ${plan.interval === "month" ? "Monthly" : "Yearly"} Subscription`,
       quantity: 1,
       unit_price: subtotal,
       amount: subtotal,
-    } as any) as any)
+    })
 
     // Log webhook event
     if (settings?.webhook_url) {
-      await (adminSupabase.from("webhooks").insert({
+      await adminSupabase.from("webhooks").insert({
         company_id: companyId,
         event_type: "invoice.created",
         payload: {
@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
           currency: plan.currency,
         },
         status: "pending",
-      } as any) as any)
+      })
     }
 
     // Check if request wants JSON (from fetch) or redirect (from link)

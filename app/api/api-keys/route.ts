@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     const companyId = (session.user as any).companyId
-    const adminSupabase = createAdminClient()
+    const adminSupabase = createAdminClient() as any
 
     const body = await request.json()
     const { name, expires_in_days } = body
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store hashed key
-    const { data: apiKeyRecord, error } = await (adminSupabase
+    const { data: apiKeyRecord, error } = await adminSupabase
       .from("api_keys")
       .insert({
         company_id: companyId,
@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
         key_prefix: keyPrefix,
         expires_at: expiresAt,
         is_active: true,
-      } as any)
+      })
       .select()
-      .single() as any)
+      .single()
 
     if (error) {
       return NextResponse.json(

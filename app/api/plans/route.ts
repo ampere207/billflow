@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     const companyId = (session.user as any).companyId
-    const adminSupabase = createAdminClient()
+    const adminSupabase = createAdminClient() as any
 
     const body = await request.json()
     const { name, description, price, currency, interval, features } = body
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: plan, error } = await (adminSupabase
+    const { data: plan, error } = await adminSupabase
       .from("plans")
       .insert({
         company_id: companyId,
@@ -68,9 +68,9 @@ export async function POST(request: NextRequest) {
         interval: interval,
         features: features || null,
         is_active: true,
-      } as any)
+      })
       .select()
-      .single() as any)
+      .single()
 
     if (error) {
       return NextResponse.json(

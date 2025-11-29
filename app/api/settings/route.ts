@@ -45,7 +45,7 @@ export async function PATCH(request: NextRequest) {
 
     const companyId = (session.user as any).companyId
     const supabase = await createClient()
-    const adminSupabase = createAdminClient()
+    const adminSupabase = createAdminClient() as any
 
     const body = await request.json()
     const { tax_rate, currency, invoice_prefix, payment_terms_days, webhook_url } = body
@@ -60,7 +60,7 @@ export async function PATCH(request: NextRequest) {
     let result
     if (existing) {
       // Update existing
-      const { data, error } = await (adminSupabase
+      const { data, error } = await adminSupabase
         .from("billing_settings")
         .update({
           tax_rate: tax_rate !== undefined ? Number(tax_rate) : undefined,
@@ -68,10 +68,10 @@ export async function PATCH(request: NextRequest) {
           invoice_prefix: invoice_prefix || undefined,
           payment_terms_days: payment_terms_days !== undefined ? Number(payment_terms_days) : undefined,
           webhook_url: webhook_url || undefined,
-        } as any)
-        .eq("company_id", companyId as any)
+        })
+        .eq("company_id", companyId)
         .select()
-        .single() as any)
+        .single()
 
       if (error) {
         return NextResponse.json(
@@ -82,7 +82,7 @@ export async function PATCH(request: NextRequest) {
       result = data
     } else {
       // Create new
-      const { data, error } = await (adminSupabase
+      const { data, error } = await adminSupabase
         .from("billing_settings")
         .insert({
           company_id: companyId,
@@ -91,9 +91,9 @@ export async function PATCH(request: NextRequest) {
           invoice_prefix: invoice_prefix || "INV",
           payment_terms_days: payment_terms_days !== undefined ? Number(payment_terms_days) : 30,
           webhook_url: webhook_url || null,
-        } as any)
+        })
         .select()
-        .single() as any)
+        .single()
 
       if (error) {
         return NextResponse.json(
