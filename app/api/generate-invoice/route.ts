@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     }
 
     const companyId = (session.user as any).companyId
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
     const adminSupabase = createAdminClient() as any
 
     // Get first active subscription
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     }
 
     const companyId = (session.user as any).companyId
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
     const adminSupabase = createAdminClient() as any
 
     const body = await request.json()

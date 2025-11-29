@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const supabase = await createClient()
+        const supabase = (await createClient()) as any
         
         // For demo purposes, we'll use a simple check
         // In production, use Supabase Auth properly

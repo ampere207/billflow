@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     }
 
     const companyId = (session.user as any).companyId
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
 
     const { data: plans, error } = await supabase
       .from("plans")
